@@ -8,7 +8,8 @@ package lab2;
  * @version 1.00
  */
 public class NameService {
-    
+    private static final int MAX_FULL_NAME_LENGTH = 60;
+    private static final int MIN_FULL_NAME_LENGTH = 5;
     /**
      * Finds and returns the last name from within a full name. Caution: 
      * No validation is performed.
@@ -18,12 +19,16 @@ public class NameService {
      * @throws IllegalArgumentException if fullName is null or empty or has 
      * fewer than two parts
      */
-    public String extractLastName(String fullName) {
+    public final String extractLastName(String fullName) throws 
+            IllegalArgumentException {
         String lastName = null;
-        
-        // write your code here to extract the lastName and store in the
-        // above local variable
-        
+        String[] firstAndLastName = fullName.split(" ");
+        if(fullName.length() >MAX_FULL_NAME_LENGTH ||fullName.length()
+                < MIN_FULL_NAME_LENGTH||firstAndLastName.length < 2){              
+            throw new IllegalArgumentException("Sorry, a valid first name must "
+                    + "be provided. (use Format: first last)");
+        }
+        lastName = firstAndLastName[firstAndLastName.length-1];
         return lastName;
     }
     

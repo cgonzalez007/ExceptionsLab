@@ -20,12 +20,16 @@ import java.util.regex.Pattern;
  * @version 1.00
  */
 public class Employee {
-    public static final int MAX_VACATION_DAYS = 28;
+    
     private String firstName;
     private String lastName;
     private String ssn;
     private int daysVacation;
-
+    private static final int MAX_NAME_LENGTH = 50;
+    private static final int MIN_NAME_LENGTH = 2;
+    public static final int MAX_VACATION_DAYS = 28;
+    public static final int MIN_VACATION_DAYS = 0;
+    
     public Employee() {
         // initialize a bunch of default values
         firstName = "Unknown";
@@ -42,7 +46,7 @@ public class Employee {
         setDaysVacation(daysVacation);
     }
     
-    public int getDaysVacation() {
+    public final int getDaysVacation() {
         return daysVacation;
     }
     /** Validation rules:
@@ -50,9 +54,10 @@ public class Employee {
     * -max cannot be more than 120
      * @param daysVacation
     */
-    public void setDaysVacation(int daysVacation) throws 
+    public final void setDaysVacation(int daysVacation) throws 
             IllegalArgumentException{
-        if(daysVacation < 0 || daysVacation > 120 ){
+        if(daysVacation > MAX_VACATION_DAYS || daysVacation <  
+                 MIN_VACATION_DAYS){
             throw new IllegalArgumentException("Sorry, vacation days must"
                     + "be between 0 and 120 days inclusive");
         }
@@ -63,7 +68,8 @@ public class Employee {
         return firstName;
     }
 
-    public final void setFirstName(String firstName) {
+    public final void setFirstName(String firstName) throws 
+            IllegalArgumentException {
          /**Pattern sets the rules for what exactly we are checking here.
          * Matcher makes sure that the the string being passed matches 
          * the pattern. (only contains a-z and 0-9, no special characters
@@ -71,12 +77,13 @@ public class Employee {
         */
         Pattern p = Pattern.compile("[^a-z0-9-]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(firstName);
-        boolean isValid = m.find();
-        if(firstName.isEmpty()|| !isValid || firstName == null ||
-                firstName.length()>50){
-                throw new RuntimeException("Sorry, a firstName name must be"
-                        + " provided.\nNo Special symbols allowed.\nLast name"
-                        + " must be between 1 and 50 characters.");           
+        boolean isInvalid = m.find();
+        if(firstName.isEmpty()|| isInvalid || firstName == null ||
+                firstName.length()>MAX_NAME_LENGTH || firstName.length()<
+                MIN_NAME_LENGTH ){
+                throw new IllegalArgumentException("Sorry, a firstName name "
+                        + "must be provided.\nNo Special symbols allowed.\nLast "
+                        + "name must be between 1 and 50 characters.");           
         }
         this.firstName = firstName;
     }
@@ -92,7 +99,8 @@ public class Employee {
      * -No length must be between 1 and 50
      * @param lastName
      */
-    public void setLastName(String lastName) throws RuntimeException {
+    public final void setLastName(String lastName) throws 
+            IllegalArgumentException {
         /**Pattern sets the rules for what exactly we are checking here.
          * Matcher makes sure that the the string being passed matches 
          * the pattern. (only contains a-z and 0-9, no special characters
@@ -100,12 +108,13 @@ public class Employee {
         */
         Pattern p = Pattern.compile("[^a-z0-9-]", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(lastName);
-        boolean isValid = m.find();
-        if(lastName.isEmpty()|| !isValid || lastName == null ||
-                lastName.length()>50){
-                throw new RuntimeException("Sorry, a last name must be provided."
-                        + "\nNo Special symbols allowed.\nLast name must be"
-                        + "between 1 and 50 characters.");           
+        boolean isInvalid = m.find();
+        if(lastName.isEmpty()|| isInvalid || lastName == null ||
+                lastName.length()>MAX_NAME_LENGTH || lastName.length() < 
+                MIN_NAME_LENGTH){
+                throw new IllegalArgumentException("Sorry, a valid last name "
+                        + "must be provided.\nNo Special symbols allowed.\nLast"
+                        + " name must be between 1 and 50 characters.");           
         }
         this.lastName = lastName;
     }
@@ -119,12 +128,16 @@ public class Employee {
      * @param ssn
      * @throws RuntimeException 
      */
-    public void setSsn(String ssn) throws RuntimeException {
+    public final void setSsn(String ssn) throws 
+            IllegalArgumentException {
         /**Pattern sets the rules for what exactly we are checking here.
          * Matcher makes sure that the the string being passed matches 
          * the pattern. (only contains 0-9, no a-z characters no special
          * characters besides a dash mark.)
         */
+        /**
+         * 
+        FOUND ONLINE:
         Pattern pattern1 = Pattern.compile("^[0-9]{3}-[0-9]{2}-[0-9]{4}$");
         Pattern pattern2 = Pattern.compile("^[0-9]{9}$");
         Matcher matcher1 = pattern1.matcher(ssn);
@@ -140,21 +153,12 @@ public class Employee {
         if(isValidWithoutHyphens){
             ssn = new StringBuilder(ssn).insert(3, '-').insert(6, '-').
                     toString();
+        }*/
+        if(ssn.isEmpty()||ssn == null || ssn.length()>9){
+           throw new RuntimeException("Sorry, a valid SSN must be "
+                        + "provided.\nNo Special symbols allowed.\nSSN "
+                        + "format: #########.");           
         }
         this.ssn = ssn;
-    }
-    //For testing purposes...
-    public static void main(String[] args) {
-//         Pattern p = Pattern.compile("^[0-9]{9}$");
-//        Matcher m = p.matcher("339193415");
-//        boolean isInvalid = m.find();
-//        String x = "339193415";
-//        x = new StringBuilder(x).insert(3, '-').insert(6, '-').toString();
-//        System.out.println(x);
-Pattern p = Pattern.compile("[a-z0-9-]*", Pattern.CASE_INSENSITIVE);
-        
-        Matcher ma = p.matcher("d-sdfa$sdga");
-        boolean isValid = ma.find();
-        System.out.println(isValid);
     }
 }

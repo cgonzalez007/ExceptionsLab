@@ -17,24 +17,37 @@ import javax.swing.JOptionPane;
  */
 public class Challenge1 {
     private static final int LAST_NAME_IDX = 1;
-
+    private static final int MAX_FULL_NAME_LENGTH = 60;
+    private static final int MIN_FULL_NAME_LENGTH = 5;
     public static void main(String[] args) {
         Challenge1 app = new Challenge1();
         
-        String fullName = JOptionPane.showInputDialog("Enter full name (use Format: first last):");
-        String lastName = app.extractLastName(fullName);
-        String msg = "Your last name is: " + lastName;
-        JOptionPane.showMessageDialog(null, msg);
+        try{
+            String fullName = JOptionPane.showInputDialog("Enter full name "
+                    + "(use Format: first last):");
+            String lastName = app.extractLastName(fullName);
+            String msg = "Your last name is: " + lastName;
+            JOptionPane.showMessageDialog(null, msg);
+        }catch(IllegalArgumentException ae){
+            JOptionPane.showMessageDialog(null, ae.getMessage());
+        }
+        
     }
     
     // write the code to extract the lastName from the fullName
     // Use exception handling to prevent a crash in the event that fullName
     // is null or empty. Throw the exception to the calling method. and handle
     // it there.
-    public String extractLastName(String fullName) {
-        String lastName = null;
+    public String extractLastName(String fullName) throws 
+            IllegalArgumentException {
+        String[] firstAndLastName = fullName.split(" ");
+        if(fullName.length() >MAX_FULL_NAME_LENGTH ||fullName.length()
+                < MIN_FULL_NAME_LENGTH||firstAndLastName.length < 2){              
+            throw new IllegalArgumentException("Sorry, a valid first name must "
+                    + "be provided. (use Format: first last)");
+        }
         
-        // Your code goes here. Assign your value to lastName
+        String lastName = firstAndLastName[firstAndLastName.length-1];
         
         return lastName;
     }
