@@ -10,10 +10,12 @@ package lab3;
  * @author cgonz
  */
 public class InvalidFullNameInputException extends IllegalArgumentException {
-    
+    private static final String MESSAGE = "Sorry. A valid name must be"
+            + " provided. (use Format: first last)";
     public InvalidFullNameInputException() {
+        super(MESSAGE);
     }
-
+    
     public InvalidFullNameInputException(String s) {
         super(s);
     }

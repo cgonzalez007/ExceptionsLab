@@ -19,14 +19,14 @@ public class NameService {
      * @throws YourCustomExceptionName if fullName is null or empty or has
      * fewer than two parts
      */
-    public String extractLastName(String fullName) {
+    public String extractLastName(String fullName) throws 
+            InvalidFullNameInputException {
 
         String lastName = null;
         String[] firstAndLastName = fullName.split(" ");
         if(fullName.length() >MAX_FULL_NAME_LENGTH ||fullName.length()
                 < MIN_FULL_NAME_LENGTH||firstAndLastName.length < 2){              
-            throw new IllegalArgumentException("Sorry, a valid first name must "
-                    + "be provided. (use Format: first last)");
+            throw new InvalidFullNameInputException();
         }
         lastName = firstAndLastName[firstAndLastName.length-1];
         
